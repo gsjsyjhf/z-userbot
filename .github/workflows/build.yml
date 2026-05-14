@@ -3,7 +3,10 @@ name: Build x86_64
 on:
   push:
     paths:
-      - '_build/core.pyx'
+      - '_build/_zmod.pyx'
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -11,15 +14,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.11'
 
       - name: Install Cython
         run: pip install cython setuptools
 
-      - name: Compile core_x86_64.so
+      - name: Compile _zmod_x86_64.so
         run: |
           cd _build
           python setup_core.py
@@ -27,20 +30,20 @@ jobs:
 
       - name: Strip symbols
         run: |
-          SO_FILE=$(find _build -name "core*.so" -type f | head -1)
+          SO_FILE=$(find _build -name "_zmod*.so" -type f | head -1)
           if [ -n "$SO_FILE" ]; then
             strip --strip-all "$SO_FILE"
           fi
 
       - name: Move and upload
         run: |
-          SO_FILE=$(find _build -name "core*.so" -type f | head -1)
+          SO_FILE=$(find _build -name "_zmod*.so" -type f | head -1)
           if [ -n "$SO_FILE" ]; then
-            mv "$SO_FILE" core_x86_64.so
+            mv "$SO_FILE" _zmod_x86_64.so
             git config user.name "Z-DeployBot"
             git config user.email "deploy@zbot.local"
-            git add core_x86_64.so
-            git diff --cached --quiet || git commit -m "[skip ci] auto-build core_x86_64.so"
+            git add _zmod_x86_64.so
+            git diff --cached --quiet || git commit -m "[skip ci] auto-build _zmod_x86_64.so"
             git push
           fi
         env:
