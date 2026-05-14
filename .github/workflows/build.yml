@@ -25,6 +25,13 @@ jobs:
           python setup_core.py
           cd ..
 
+      - name: Strip symbols
+        run: |
+          SO_FILE=$(find _build -name "core*.so" -type f | head -1)
+          if [ -n "$SO_FILE" ]; then
+            strip --strip-all "$SO_FILE"
+          fi
+
       - name: Move and upload
         run: |
           SO_FILE=$(find _build -name "core*.so" -type f | head -1)
