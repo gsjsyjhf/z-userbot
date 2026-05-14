@@ -30,20 +30,20 @@ jobs:
 
       - name: Strip symbols
         run: |
-          SO_FILE=$(find _build -name "_zmod*.so" -type f | head -1)
+          SO_FILE=$(find _build -name '_zmod*.so' -type f | head -1)
           if [ -n "$SO_FILE" ]; then
             strip --strip-all "$SO_FILE"
           fi
 
       - name: Move and upload
         run: |
-          SO_FILE=$(find _build -name "_zmod*.so" -type f | head -1)
+          SO_FILE=$(find _build -name '_zmod*.so' -type f | head -1)
           if [ -n "$SO_FILE" ]; then
             mv "$SO_FILE" _zmod_x86_64.so
             git config user.name "Z-DeployBot"
             git config user.email "deploy@zbot.local"
             git add _zmod_x86_64.so
-            git diff --cached --quiet || git commit -m "[skip ci] auto-build _zmod_x86_64.so"
+            git diff --cached --quiet || git commit -m "[skip ci] auto-build"
             git push
           fi
         env:
