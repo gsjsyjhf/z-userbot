@@ -1,7 +1,7 @@
 {
-  "version": "5.13",
+  "version": "5.14",
   "changelog": "تحسينات",
-  "date": "2026-05-16 23:37",
+  "date": "2026-05-16 23:47",
   "py": "3.11",
   "files": {
     "main.py": "main.py",
